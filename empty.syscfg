@@ -110,7 +110,6 @@ GPIO3.associatedPins[0].$name        = "IN";
 GPIO3.associatedPins[0].initialValue = "SET";
 GPIO3.associatedPins[0].assignedPin  = "8";
 GPIO3.associatedPins[1].$name        = "OUT";
-GPIO3.associatedPins[1].initialValue = "SET";
 GPIO3.associatedPins[1].assignedPin  = "9";
 
 SYSCTL.forceDefaultClkConfig = true;

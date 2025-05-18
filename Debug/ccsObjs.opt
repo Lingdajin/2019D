@@ -3,7 +3,6 @@
 "./startup_mspm0g350x_ticlang.o"
 "./USER/BTN/BTN.o"
 "./USER/GUI/GUI.o"
-"./USER/SRC/tjc_usart_hmi.o"
 "./USER/TICK/Tick.o"
 "./USER/UART/UART.o"
 "./USER/USERTASK/UserTask.o"

@@ -15,7 +15,6 @@ ORDERED_OBJS += \
 "./startup_mspm0g350x_ticlang.o" \
 "./USER/BTN/BTN.o" \
 "./USER/GUI/GUI.o" \
-"./USER/SRC/tjc_usart_hmi.o" \
 "./USER/TICK/Tick.o" \
 "./USER/UART/UART.o" \
 "./USER/USERTASK/UserTask.o" \
@@ -33,14 +32,12 @@ RMDIR := RMDIR /S/Q
 -include subdir_vars.mk
 -include USER/BTN/subdir_vars.mk
 -include USER/GUI/subdir_vars.mk
--include USER/SRC/subdir_vars.mk
 -include USER/TICK/subdir_vars.mk
 -include USER/UART/subdir_vars.mk
 -include USER/USERTASK/subdir_vars.mk
 -include subdir_rules.mk
 -include USER/BTN/subdir_rules.mk
 -include USER/GUI/subdir_rules.mk
--include USER/SRC/subdir_rules.mk
 -include USER/TICK/subdir_rules.mk
 -include USER/UART/subdir_rules.mk
 -include USER/USERTASK/subdir_rules.mk
@@ -161,8 +158,8 @@ all: $(OBJS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "empty.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "USER\BTN\BTN.o" "USER\GUI\GUI.o" "USER\SRC\tjc_usart_hmi.o" "USER\TICK\Tick.o" "USER\UART\UART.o" "USER\USERTASK\UserTask.o" 
-	-$(RM) "empty.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "USER\BTN\BTN.d" "USER\GUI\GUI.d" "USER\SRC\tjc_usart_hmi.d" "USER\TICK\Tick.d" "USER\UART\UART.d" "USER\USERTASK\UserTask.d" 
+	-$(RM) "empty.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "USER\BTN\BTN.o" "USER\GUI\GUI.o" "USER\TICK\Tick.o" "USER\UART\UART.o" "USER\USERTASK\UserTask.o" 
+	-$(RM) "empty.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "USER\BTN\BTN.d" "USER\GUI\GUI.d" "USER\TICK\Tick.d" "USER\UART\UART.d" "USER\USERTASK\UserTask.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -16,7 +16,7 @@
 #define RESISTOR_IN    3300.0f     //信号源与放大器之间串联的电阻大小
 #define RESISTOR_LOAD  2000.0f     //放大器负载电路大小
 
-#define MAX_POINTS  64      //扫频点数
+#define MAX_POINTS  1000      //扫频点数
 #define GAIN_MAX 200.0f     //最大增益
 #define FREQ_START 100   //起始频率
 #define FREQ_END 1000000  //终止频率

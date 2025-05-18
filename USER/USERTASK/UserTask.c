@@ -67,6 +67,8 @@ void CalInputImp(void) {
     switch (InputImpState) {
         case IDLE:
             NVIC_EnableIRQ(ADC12_0_INST_INT_IRQN);  //使能ADC中断
+            DL_GPIO_clearPins(GPIO_CON_PORT, GPIO_CON_OUT_PIN);
+            DL_Common_delayCycles(32000000);    //延时1s
             DL_ADC12_enableConversions(ADC12_0_INST);
             DL_ADC12_startConversion(ADC12_0_INST);
             InputImpState = WAIT;
@@ -230,13 +232,17 @@ void PlotAmpFreq(void) {
     switch (PlotState) {
         case WAIT_COMMAND:
             NVIC_EnableIRQ(UART_0_INST_INT_IRQN);   //开启串口中断
+            DL_GPIO_clearPins(GPIO_CON_PORT, GPIO_CON_OUT_PIN);   //断开负载
+            //DL_Common_delayCycles(32000000);    //延时1s
             NVIC_EnableIRQ(ADC12_0_INST_INT_IRQN);  //使能ADC中断
             if(uart_rx_finish) {
                 parse_rx_buffer((char *)uart_rx_buffer, &input_freq, &input_amp);
                 uart_rx_finish = false;
+                
                 uart_rx_index = 0;
                 NVIC_DisableIRQ(UART_0_INST_INT_IRQN);  //关闭中断直到采样完成
                 PlotState = START_ADC;
+                
             }
             break;
         case START_ADC:
@@ -255,12 +261,14 @@ void PlotAmpFreq(void) {
             uint16_t InVol = DL_ADC12_getMemResult(ADC12_0_INST, DL_ADC12_MEM_IDX_0);
             float InAmp = AD8310_Map((float)InVol * 3300 / 4095);
             float OutAmp = AD8310_Map((float)OutVol * 3300 / 4095);
-            // float gain = OutAmp / InAmp;
-            float gain = 100;
-            if(point_index < MAX_POINTS) {
-                freq_buffer[point_index] = input_freq;
-                gain_buffer[point_index] = gain;
-                point_index++;
+            float gain = OutAmp / InAmp;
+            //float gain = 100;
+            if(input_freq >= 100.0f && input_freq <= 1000000.0f){
+                if(point_index < MAX_POINTS) {
+                    freq_buffer[point_index] = input_freq;
+                    gain_buffer[point_index] = gain;
+                    point_index++;
+                }
             }
             uint16_t x = mapFreqToX(input_freq);
             uint16_t y = mapGainToY(gain);
@@ -275,10 +283,11 @@ void PlotAmpFreq(void) {
             }
             lastX = x; lastY = y;
             //绘制完毕，可以计算上截频并更新参数了
-            if(point_index == MAX_POINTS - 1) 
+            if(point_index == MAX_POINTS - 1 || input_freq >= 1000000.0f) 
             {
                 get_3dbcutoff_freq(freq_buffer, gain_buffer);
                 Param_update(c_param);
+                point_index = 0;
             }
             PlotState = WAIT_COMMAND;
             break;
@@ -287,6 +296,8 @@ void PlotAmpFreq(void) {
         PlotState = WAIT_COMMAND;
         point_index = 0;
         lastX = lastY = -1;
+        DL_GPIO_clearPins(GPIO_CON_PORT, GPIO_CON_OUT_PIN);   //断开负载
+        DL_Common_delayCycles(32000000);    //延时1s
         NVIC_DisableIRQ(UART_0_INST_INT_IRQN);
         NVIC_DisableIRQ(ADC12_0_INST_INT_IRQN);
     }
@@ -399,8 +410,17 @@ void CalErrGet(void){
             }
             break;
         case PROCESS:
-            uint16_t OutVol = DL_ADC12_getMemResult(ADC12_0_INST, DL_ADC12_MEM_IDX_1);
-            uint16_t InVol = DL_ADC12_getMemResult(ADC12_0_INST, DL_ADC12_MEM_IDX_0);
+            uint32_t OutVolSum = 0;
+            uint32_t InVolSum = 0;
+            for(int i = 0; i < 10 && gCheckADC; i++){
+                OutVolSum += DL_ADC12_getMemResult(ADC12_0_INST, DL_ADC12_MEM_IDX_1);
+                InVolSum += DL_ADC12_getMemResult(ADC12_0_INST, DL_ADC12_MEM_IDX_0);
+                gCheckADC = false;
+                while (!gCheckADC)
+                    ;
+            }
+            uint16_t OutVol = OutVolSum / 10;
+            uint16_t InVol = InVolSum / 10;
             float InAD8310_Electrical_Level = (float)InVol * 3.3f / 4096;
             float OutAD8310_Electrical_Level = (float)OutVol * 3.3f / 4096;
 
@@ -481,6 +501,13 @@ void Err_Screen_Update(){
     switch (Err_code) {
         /*  正常状态    */
         case NORMAL:
+            sprintf(str,"status.pco=GREEN\xff\xff\xff");
+            sendString(str,UART_2_INST);
+            sprintf(str,"status.txt=\"正常\"\xff\xff\xff");
+            sendString(str,UART_2_INST);
+            sprintf(str,"eor.pco=GREEN\xff\xff\xff");
+            sprintf(str,"eor.txt=\"无\"\xff\xff\xff");
+            sendString(str,UART_2_INST);
             break;
         /*  元件开路    */
         case R1_BROKEN:

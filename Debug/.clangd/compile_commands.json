@@ -12,11 +12,6 @@
    {
       "directory" : "D:/CodeField/temp/2019D/Debug",
       "command"   : "clang++ -D__MSPM0G3507__ -I\"D:/CodeField/temp/2019D\" -I\"D:/CodeField/temp/2019D/Debug\" -I\"C:/ti/mspm0_sdk_2_04_00_06/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_04_00_06/source\" -isystem\"C:/ti/ccstheia151/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"C:/ti/ccstheia151/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/include/c++/v1\" -isystem\"C:/ti/ccstheia151/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/lib/clang/18/include\" -isystem\"C:/ti/ccstheia151/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/include/c\"",
-      "file"      : "D:/CodeField/temp/2019D/USER/SRC/tjc_usart_hmi.c"
-   },
-   {
-      "directory" : "D:/CodeField/temp/2019D/Debug",
-      "command"   : "clang++ -D__MSPM0G3507__ -I\"D:/CodeField/temp/2019D\" -I\"D:/CodeField/temp/2019D/Debug\" -I\"C:/ti/mspm0_sdk_2_04_00_06/source/third_party/CMSIS/Core/Include\" -I\"C:/ti/mspm0_sdk_2_04_00_06/source\" -isystem\"C:/ti/ccstheia151/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/include/armv7em-ti-none-eabihf/c++/v1\" -isystem\"C:/ti/ccstheia151/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/include/c++/v1\" -isystem\"C:/ti/ccstheia151/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/lib/clang/18/include\" -isystem\"C:/ti/ccstheia151/ccs/tools/compiler/ti-cgt-armllvm_4.0.0.LTS/include/c\"",
       "file"      : "D:/CodeField/temp/2019D/USER/TICK/Tick.c"
    },
    {
